@@ -20,6 +20,8 @@ public enum JExtractGenerationMode: String, Sendable, Codable {
   /// Java Native Interface
   case jni
 
+  case kotlinJVM
+
   public static var `default`: JExtractGenerationMode {
     .ffm
   }
