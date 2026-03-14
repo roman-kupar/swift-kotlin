@@ -77,6 +77,9 @@ extension SwiftJava {
 
     @Option(help: "A path to a custom swift-java.config to use")
     var config: String? = nil
+
+    @Option(name: .long, help: "The target language for code generation (java or kotlin)")
+    var lang: String? = nil
   }
 
   struct CommonJVMOptions: ParsableArguments {

@@ -85,40 +85,42 @@ public struct SwiftToJava {
 
     try translator.analyze()
 
-    switch config.effectiveMode {
-    case .ffm:
-      let generator = FFMSwift2JavaGenerator(
+    switch config.effectiveLang {
+    case .kotlin:
+      let generator = FFMSwift2KotlinGenerator(
         config: self.config,
         translator: translator,
         javaPackage: config.javaPackage ?? "",
         swiftOutputDirectory: outputSwiftDirectory,
         javaOutputDirectory: outputJavaDirectory
       )
-
       try generator.generate()
 
-    case .jni:
-      let generator = JNISwift2JavaGenerator(
-        config: self.config,
-        translator: translator,
-        javaPackage: config.javaPackage ?? "",
-        swiftOutputDirectory: outputSwiftDirectory,
-        javaOutputDirectory: outputJavaDirectory,
-        javaClassLookupTable: wrappedJavaClassesLookupTable
-      )
-
-      try generator.generate()
-
-    case .kotlinJVM:
-      let generator = FFMSwift2KotlinGenerator( 
+    case .java:
+      switch config.effectiveMode {
+      case .ffm:
+        let generator = FFMSwift2JavaGenerator(
           config: self.config,
           translator: translator,
           javaPackage: config.javaPackage ?? "",
           swiftOutputDirectory: outputSwiftDirectory,
           javaOutputDirectory: outputJavaDirectory
-      )
+        )
 
-      try generator.generate()
+        try generator.generate()
+
+      case .jni:
+        let generator = JNISwift2JavaGenerator(
+          config: self.config,
+          translator: translator,
+          javaPackage: config.javaPackage ?? "",
+          swiftOutputDirectory: outputSwiftDirectory,
+          javaOutputDirectory: outputJavaDirectory,
+          javaClassLookupTable: wrappedJavaClassesLookupTable
+        )
+
+        try generator.generate()
+      }
     }
 
     print("[swift-java] Imported Swift module '\(swiftModule)': " + "done.".green)

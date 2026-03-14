@@ -43,6 +43,11 @@ public struct Configuration: Codable {
     mode ?? .default
   }
 
+  public var lang: JExtractLanguageMode?
+  public var effectiveLang: JExtractLanguageMode {
+    lang ?? .default
+  }
+
   public var writeEmptyFiles: Bool? // FIXME: default it to false, but that plays not nice with Codable
 
   public var minimumInputAccessLevelMode: JExtractMinimumAccessLevelMode?

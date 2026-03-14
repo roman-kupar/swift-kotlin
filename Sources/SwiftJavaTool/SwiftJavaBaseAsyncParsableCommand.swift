@@ -183,6 +183,16 @@ extension SwiftJavaBaseAsyncParsableCommand {
     }
     // override configuration with options from command line
     config.logLevel = command.logLevel
+
+    // Override lang if passed via CLI
+    if let langString = command.commonOptions.lang {
+      if let parsedLang = JExtractLanguageMode(rawValue: langString) {
+        config.lang = parsedLang
+      } else {
+        log.warning("Invalid language option provided: '\(langString)'. Valid options are 'java' or 'kotlin'.")
+      }
+    }
+
     return config
   }
 }
