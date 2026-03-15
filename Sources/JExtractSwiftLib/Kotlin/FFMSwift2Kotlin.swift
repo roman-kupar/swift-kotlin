@@ -174,32 +174,32 @@ package class FFMSwift2KotlinGenerator: FFMSwift2JavaGenerator {
                 case .void:     return "Unit"
                 default:        return nominal.nominalTypeDecl.name
             }
-
-            case .metatype:
-              return "KClass<*>"
-
-            case .function:
-              return "Function<*>"
-
-            // Fallback for existential, opaque, composite, generic, multi-tuple
-            case .existential, .opaque, .composite, .genericParameter, .tuple:
-              return "Any"
-            }
+        
+        case .metatype:
+            return "KClass<*>"
+        
+        case .function:
+            return "Function<*>"
+        
+        // Fallback for existential, opaque, composite, generic, multi-tuple
+        case .existential, .opaque, .composite, .genericParameter, .tuple:
+            return "Any"
         }
     }
+}
 
     // MARK: - String helpers
 
-    private extension String {
-        // Converts snake_case or PascalCase -> camelCase
-        var asCamelCase: String {
-            guard !isEmpty else { return self }
-            if contains("_") {
-                let parts = split(separator: "_").map(String.init)
-                return (parts.first.map { $0.lowercased() } ?? "")
-                    + parts.dropFirst().map { $0.capitalized }.joined()
-            }
-            return prefix(1).lowercased() + dropFirst()
+private extension String {
+    // Converts snake_case or PascalCase -> camelCase
+    var asCamelCase: String {
+        guard !isEmpty else { return self }
+        if contains("_") {
+            let parts = split(separator: "_").map(String.init)
+            return (parts.first.map { $0.lowercased() } ?? "")
+                + parts.dropFirst().map { $0.capitalized }.joined()
         }
-    } 
+        return prefix(1).lowercased() + dropFirst()
+    }
+} 
     

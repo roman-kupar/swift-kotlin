@@ -20,6 +20,7 @@ rootProject.name = "swift-java"
 
 include("SwiftKitCore")
 include("SwiftKitFFM")
+include("module:sample")
 
 // Include sample apps -- you can run them via `gradle Name:run`
 if (!(settings.providers.gradleProperty("skipSamples").orNull.toBoolean())) {

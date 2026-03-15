@@ -510,6 +510,9 @@ let package = Package(
       ],
       swiftSettings: [
         .swiftLanguageMode(.v5)
+      ],
+      linkerSettings: [
+        .unsafeFlags(["-Xlinker", "--allow-multiple-definition"], .when(platforms: [.linux]))
       ]
     ),
 

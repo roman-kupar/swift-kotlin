@@ -179,3 +179,4 @@ extension JExtractGenerationMode: ExpressibleByArgument {}
 extension JExtractMinimumAccessLevelMode: ExpressibleByArgument {}
 extension JExtractMemoryManagementMode: ExpressibleByArgument {}
 extension JExtractAsyncFuncMode: ExpressibleByArgument {}
+extension JExtractLanguageMode: ExpressibleByArgument {}  
