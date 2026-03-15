@@ -87,14 +87,35 @@ public struct SwiftToJava {
 
     switch config.effectiveLang {
     case .kotlin:
+      let basePackage = config.javaPackage ?? ""
+      let ffmPackage = basePackage.isEmpty ? "ffm" : "\(basePackage).ffm"
+      
       let generator = FFMSwift2KotlinGenerator(
         config: self.config,
         translator: translator,
-        javaPackage: config.javaPackage ?? "",
+        javaPackage: basePackage,
         swiftOutputDirectory: outputSwiftDirectory,
         javaOutputDirectory: outputJavaDirectory
       )
-      try generator.generate()
+
+      if config.effectiveEnableKotlinImpl {
+        // 1. Generate the low-level Java FFM code into an `ffm` sub-package
+        let javaFFMGenerator = FFMSwift2JavaGenerator(
+          config: self.config,
+          translator: translator,
+          javaPackage: ffmPackage,
+          swiftOutputDirectory: outputSwiftDirectory,
+          javaOutputDirectory: outputJavaDirectory
+        )
+        try javaFFMGenerator.generate()
+      } else {
+        // Just generate the required Swift C-thunks without the Java boilerplate
+        try generator.writeSwiftThunkSources()
+        try generator.writeSwiftExpectedEmptySources()
+      }
+
+      // 2. Generate the Kotlin facade in the main package
+      try generator.writeKotlinSources()
 
     case .java:
       switch config.effectiveMode {

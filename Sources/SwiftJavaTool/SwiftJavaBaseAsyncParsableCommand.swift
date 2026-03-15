@@ -193,6 +193,10 @@ extension SwiftJavaBaseAsyncParsableCommand {
       }
     }
 
+    if command.commonOptions.enableKotlinImpl {
+      config.enableKotlinImpl = true
+    }
+
     return config
   }
 }

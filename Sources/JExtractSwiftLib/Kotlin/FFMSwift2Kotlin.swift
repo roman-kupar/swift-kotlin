@@ -6,16 +6,6 @@ import SwiftSyntaxBuilder
 
 package class FFMSwift2KotlinGenerator: FFMSwift2JavaGenerator {
 
-    override func generate() throws {
-        try writeSwiftThunkSources()
-
-        // Replace Java export with Kotlin stub generation
-        // TODO: make kotlin actually callable 
-        try writeKotlinSources()
-
-        try writeSwiftExpectedEmptySources()
-    }
-
     // MARK: - File writing
 
     public func writeKotlinSources() throws {
@@ -55,6 +45,13 @@ package class FFMSwift2KotlinGenerator: FFMSwift2JavaGenerator {
         if !javaPackage.isEmpty {
             printer.print("package \(javaPackage)")
             printer.print("")
+            if config.effectiveEnableKotlinImpl {
+                printer.print("import \(javaPackage).ffm.\(swiftModuleName) as \(swiftModuleName)FFM")
+                printer.print("")
+            }
+        } else if config.effectiveEnableKotlinImpl {
+            printer.print("import ffm.\(swiftModuleName) as \(swiftModuleName)FFM")
+            printer.print("")
         }
 
         printer.print("object \(swiftModuleName) {")
@@ -75,6 +72,13 @@ package class FFMSwift2KotlinGenerator: FFMSwift2JavaGenerator {
         printer.print("")
         if !javaPackage.isEmpty {
             printer.print("package \(javaPackage)")
+            printer.print("")
+            if config.effectiveEnableKotlinImpl {
+                printer.print("import \(javaPackage).ffm.\(decl.swiftNominal.name) as \(decl.swiftNominal.name)FFM")
+                printer.print("")
+            }
+        } else if config.effectiveEnableKotlinImpl {
+            printer.print("import ffm.\(decl.swiftNominal.name) as \(decl.swiftNominal.name)FFM")
             printer.print("")
         }
 
@@ -100,8 +104,27 @@ package class FFMSwift2KotlinGenerator: FFMSwift2JavaGenerator {
         let args = sig.parameters.map { p in
             "\(p.parameterName ?? "_"): \(mapToKotlinType(p.type))"
         }.joined(separator: ", ")
+        let callArgs = sig.parameters.map { p in
+            p.parameterName ?? "_"
+        }.joined(separator: ", ")
 
-        printer.print("fun \(methodName)(\(args)): \(returnType) = TODO(\"Not implemented\")")
+        if config.effectiveEnableKotlinImpl {
+            if returnType == "Unit" {
+                printer.print("fun \(methodName)(\(args)): \(returnType) {")
+                printer.indent()
+                printer.print("\(swiftModuleName)FFM.\(methodName)(\(callArgs))")
+                printer.outdent()
+                printer.print("}")
+            } else {
+                printer.print("fun \(methodName)(\(args)): \(returnType) {")
+                printer.indent()
+                printer.print("return \(swiftModuleName)FFM.\(methodName)(\(callArgs))")
+                printer.outdent()
+                printer.print("}")
+            }
+        } else {
+            printer.print("fun \(methodName)(\(args)): \(returnType) = TODO(\"Not implemented\")")
+        }
     }
 
     // MARK: - Type mapping 

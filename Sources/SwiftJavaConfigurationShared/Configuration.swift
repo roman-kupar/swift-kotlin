@@ -48,6 +48,11 @@ public struct Configuration: Codable {
     lang ?? .default
   }
 
+  public var enableKotlinImpl: Bool?
+  public var effectiveEnableKotlinImpl: Bool {
+    enableKotlinImpl ?? false
+  }
+
   public var writeEmptyFiles: Bool? // FIXME: default it to false, but that plays not nice with Codable
 
   public var minimumInputAccessLevelMode: JExtractMinimumAccessLevelMode?

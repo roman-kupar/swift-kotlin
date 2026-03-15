@@ -80,6 +80,9 @@ extension SwiftJava {
 
     @Option(name: .long, help: "The target language for code generation (java or kotlin)")
     var lang: String? = nil
+
+    @Flag(name: .long, help: "Enable generation of actual Kotlin FFM implementations instead of TODOs")
+    var enableKotlinImpl: Bool = false
   }
 
   struct CommonJVMOptions: ParsableArguments {
