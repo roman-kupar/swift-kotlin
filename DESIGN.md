@@ -129,7 +129,7 @@ from the same Swift codebase.
 five separate steps. Packaging that as a plugin would make it a one-liner
 to add to any project.
 
-- Very optimistically **Coroutines.** Swift `async` → Kotlin `suspend` is a research problem but
+- Optimistically **Coroutines.** Swift `async` → Kotlin `suspend` is a research problem but
 a very appealing one. Swift's structured concurrency and Kotlin coroutines
 have enough in common that a clean mapping feels possible.
 
@@ -158,7 +158,7 @@ have enough in common that a clean mapping feels possible.
 - **Subclassing vs. standalone generator** — subclassing `FFMSwift2JavaGenerator`
   was faster but creates tight coupling. A standalone `KotlinGenerator` that
   takes `AnalysisResult` directly would be cleaner and more maintainable.
-- **Mixed-language generation** — generating Java FFM bindings alongside the Kotlin facade requires consuming projects to compile both languages. A "pure Kotlin" approach avoids this but requires completely rewriting complex FFM generation logic.
+- **Mixed-language generation** — generating Java FFM bindings alongside the Kotlin facade requires consuming projects to compile both languages. A "pure Kotlin" approach would avoid it, but it requires completely rewriting complex FFM generation logic.
 - **Strict primitive mapping** — mapping Swift's `Int` (64-bit) to Kotlin's `Long` prevents data truncation at the FFM boundary, though it forces Kotlin developers to use `Long` instead of the more idiomatic `Int`.
 
 ---

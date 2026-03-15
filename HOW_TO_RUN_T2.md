@@ -10,11 +10,10 @@ For that purpose, first we need to actually generate a Kotlin source, that would
 
 The entire process of generating the bindings, building the native Swift library, compiling the Kotlin/Java code, and linking them together at runtime is fully automated via the Gradle script (`build.gradle.kts`).
 
-To run the sample, navigate to the `module/sample` directory and execute the `run` task using the Gradle wrapper from the root of the project:
-
+To run the sample:
+### From root
 ```bash
-cd module/sample
-../../gradlew run
+ ./gradlew :module:sample:run
 ```
 
 *(Note: The first run might take a moment as it needs to build the Swift package dependencies).*

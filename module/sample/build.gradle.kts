@@ -32,7 +32,7 @@ val generateBindings = tasks.register<Exec>("generateBindings") {
         outJavaDir.mkdirs()
         outSwiftDir.mkdirs()
     }
-    workingDir = rootProject.projectDir
+    workingDir = file("../../")
     commandLine(
         "swift", "run", "swift-java", "jextract",
         "--swift-module", "TestModule",
@@ -59,7 +59,7 @@ val prepareSwiftPackage = tasks.register<Copy>("prepareSwiftPackage") {
 
     doLast {
         // Write Package.swift
-        val root = rootProject.projectDir.absolutePath
+        val root = file("../../").absolutePath
         file("build/TestModulePkg/Package.swift").writeText("""
             // swift-tools-version: 6.0
             import PackageDescription
@@ -92,12 +92,12 @@ val buildSwiftPackage = tasks.register<Exec>("buildSwiftPackage") {
 }
 
 val buildSwiftJavaLibs = tasks.register<Exec>("buildSwiftJavaLibs") {
-    workingDir = rootProject.projectDir
+    workingDir = file("../../")
     commandLine("swift", "build", "--product", "SwiftJava")
 }
 
 val buildSwiftRuntimeFunctions = tasks.register<Exec>("buildSwiftRuntimeFunctions") {
-    workingDir = rootProject.projectDir
+    workingDir = file("../../")
     commandLine("swift", "build", "--product", "SwiftRuntimeFunctions")
 }
 
@@ -123,7 +123,7 @@ tasks.named<JavaExec>("run") {
             .start().inputStream.bufferedReader().readText().trim()
 
         val spmBinPath = ProcessBuilder("swift", "build", "--show-bin-path")
-            .directory(rootProject.projectDir)
+            .directory(file("../../"))
             .start().inputStream.bufferedReader().readText().trim()
 
         val swiftRuntimePath = ProcessBuilder(

@@ -48,7 +48,7 @@ java {
 }
 
 dependencies {
-    implementation(projects.swiftKitCore)
+    implementation(project(":SwiftKitCore"))
 
     testRuntimeOnly(libs.junit.platform.launcher) // TODO: workaround for not finding junit: https://github.com/gradle/gradle/issues/34512
     testImplementation(platform(libs.junit.bom))

@@ -5,13 +5,7 @@ To generate Kotlin source code with `TODO()` stubs from a Swift file (like `Test
 Run the following command from the root of the `swift-java` project:
 
 ```bash
-swift run swift-java jextract  \
- --swift-module TestModule      \
- --input-swift Samples/TestModule \  
- --output-swift .build/swift-java/swift \ 
- --output-java .build/swift-java/kotlin   \
- --java-package com.example.test \
- --lang kotlin  
+swift run swift-java jextract --swift-module TestModule  --input-swift Samples/TestModule --output-swift .build/swift-java/swift --output-java .build/swift-java/kotlin --java-package com.example.test --lang kotlin
 ```
 
 The generated kotlin source code you will see at `.build/swift-java/kotlin` - `TestModule.kt`
