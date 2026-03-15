@@ -129,7 +129,7 @@ from the same Swift codebase.
 five separate steps. Packaging that as a plugin would make it a one-liner
 to add to any project.
 
-- Optimistically **Coroutines.** Swift `async` → Kotlin `suspend` is a research problem but
+- Optimistically **Coroutines.** Swift `async` -> Kotlin `suspend` is a research problem but
 a very appealing one. Swift's structured concurrency and Kotlin coroutines
 have enough in common that a clean mapping feels possible.
 
@@ -138,28 +138,28 @@ have enough in common that a clean mapping feels possible.
 ## Trade-offs and Corners Cut
 
 ### Intentionally cut
-- **No `String` for Kotlin Implementaion** — `String` bridging across
+- **No `String` for Kotlin Implementaion** - `String` bridging across
   the FFM boundary requires `MemorySegment` marshalling which is significantly
   more complex. It still works for stubbing and raw kotlin generation, but it doesn't delegate when `--enable-kotlin-impl` is set.
-- **No nominal type (struct/class) support** — only top-level functions are
+- **No nominal type (struct/class) support** - only top-level functions are
   demonstrated. Nominal types require heap layout, witness tables, and arena
   management.
-- **No `--output-kotlin` separate flag** — Kotlin and Java FFM files share
+- **No `--output-kotlin` separate flag** - Kotlin and Java FFM files share
   the `--output-java` directory, differentiated by sub-package (`ffm/`) and
   file extension (`.kt` vs `.java`). But of course a dedicated flag would be cleaner.
-- **Stub mode generates Java-style output** — the stub `.kt` file still
+- **Stub mode generates Java-style output** - the stub `.kt` file still
   uses Java imports and boilerplate inherited from the base generator.
   A clean Kotlin stub should have no Java imports at all.
-- **`--lang kotlin` doesn't change `effectiveMode` in debug log** — the log
+- **`--lang kotlin` doesn't change `effectiveMode` in debug log** - the log
   still prints `mode: ffm` which is technically correct (the transport is FFM)
   but confusing.
 
 ### Trade-offs
-- **Subclassing vs. standalone generator** — subclassing `FFMSwift2JavaGenerator`
+- **Subclassing vs. standalone generator** - subclassing `FFMSwift2JavaGenerator`
   was faster but creates tight coupling. A standalone `KotlinGenerator` that
   takes `AnalysisResult` directly would be cleaner and more maintainable.
-- **Mixed-language generation** — generating Java FFM bindings alongside the Kotlin facade requires consuming projects to compile both languages. A "pure Kotlin" approach would avoid it, but it requires completely rewriting complex FFM generation logic.
-- **Strict primitive mapping** — mapping Swift's `Int` (64-bit) to Kotlin's `Long` prevents data truncation at the FFM boundary, though it forces Kotlin developers to use `Long` instead of the more idiomatic `Int`.
+- **Mixed-language generation** - generating Java FFM bindings alongside the Kotlin facade requires consuming projects to compile both languages. A "pure Kotlin" approach would avoid it, but it requires completely rewriting complex FFM generation logic.
+- **Strict primitive mapping** - mapping Swift's `Int` (64-bit) to Kotlin's `Long` prevents data truncation at the FFM boundary, though it forces Kotlin developers to use `Long` instead of the more idiomatic `Int`.
 
 ---
 
