@@ -21,6 +21,7 @@ import struct Foundation.CharacterSet
 enum RenderKind {
   case swift
   case java
+  case kotlin
 }
 
 func assertOutput(
@@ -49,19 +50,34 @@ func assertOutput(
   var printer: CodePrinter = CodePrinter(mode: .accumulateAll)
   switch mode {
   case .ffm:
-    let generator = FFMSwift2JavaGenerator(
-      config: config,
-      translator: translator,
-      javaPackage: "com.example.swift",
-      swiftOutputDirectory: "/fake",
-      javaOutputDirectory: "/fake"
-    )
-
     switch renderKind {
     case .swift:
+      let generator = FFMSwift2JavaGenerator(
+        config: config,
+        translator: translator,
+        javaPackage: "com.example.swift",
+        swiftOutputDirectory: "/fake",
+        javaOutputDirectory: "/fake"
+      )
       try generator.writeSwiftThunkSources(printer: &printer)
     case .java:
+      let generator = FFMSwift2JavaGenerator(
+        config: config,
+        translator: translator,
+        javaPackage: "com.example.swift",
+        swiftOutputDirectory: "/fake",
+        javaOutputDirectory: "/fake"
+      )
       try generator.writeExportedJavaSources(printer: &printer)
+    case .kotlin:
+      let generator = FFMSwift2KotlinGenerator(
+        config: config,
+        translator: translator,
+        javaPackage: "com.example.swift",
+        swiftOutputDirectory: "/fake",
+        javaOutputDirectory: "/fake"
+      )
+      try generator.writeKotlinSources(printer: &printer)
     }
 
   case .jni:
@@ -79,6 +95,8 @@ func assertOutput(
       try generator.writeSwiftThunkSources(&printer)
     case .java:
       try generator.writeExportedJavaSources(&printer)
+      case .kotlin:
+      fatalError("JNI Kotlin generation is not implemented")
     }
   }
   output = printer.finalize()

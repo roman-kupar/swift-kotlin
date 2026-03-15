@@ -18,8 +18,12 @@ package class FFMSwift2KotlinGenerator: FFMSwift2JavaGenerator {
 
     // MARK: - File writing
 
-    private func writeKotlinSources() throws {
+    public func writeKotlinSources() throws {
         var printer = CodePrinter()
+        try writeKotlinSources(printer: &printer)
+    }
+
+    public func writeKotlinSources(printer: inout CodePrinter) throws {
 
         // One .kt file per imported nominal type
         for (_, ty) in analysis.importedTypes.sorted(by: { $0.key < $1.key }) {
@@ -123,14 +127,12 @@ package class FFMSwift2KotlinGenerator: FFMSwift2JavaGenerator {
 
         // Nominal types
         case .nominal(let nominal):
-            guard let known = nominal.nominalTypeDecl.knownTypeKind else {
-              if nominal.nominalTypeDecl.name == "Void" {
+            if nominal.nominalTypeDecl.name == "Void" {
                 return "Unit"
             }
-                // Custom struct/class/enum — use Swift name as-is
+            guard let known = nominal.nominalTypeDecl.knownTypeKind else {
                 return nominal.nominalTypeDecl.name
             }
-
             switch known {
                 case .int:      return "Long"   
                 case .int8:     return "Byte"
@@ -146,6 +148,7 @@ package class FFMSwift2KotlinGenerator: FFMSwift2JavaGenerator {
                 case .double:   return "Double"
                 case .bool:     return "Boolean"
                 case .string:   return "String"
+                case .void:     return "Unit"
                 default:        return nominal.nominalTypeDecl.name
             }
 
