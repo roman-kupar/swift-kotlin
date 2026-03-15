@@ -26,11 +26,9 @@ sourceSets {
 }
 
 val generateBindings = tasks.register<Exec>("generateBindings") {
-    val outKotlinDir = file("build/generated/kotlin")
     val outJavaDir = file("build/generated/java")
     val outSwiftDir = file("build/generated/swift")
     doFirst {
-        outKotlinDir.mkdirs()
         outJavaDir.mkdirs()
         outSwiftDir.mkdirs()
     }
